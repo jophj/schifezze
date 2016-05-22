@@ -104,5 +104,6 @@ bot.on('inline.query', function(message){
     }]
   }).then(function(data){
   }).catch(function(err){
+    console.log(err);
   });
 });
