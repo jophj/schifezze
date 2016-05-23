@@ -4,24 +4,31 @@
     <div class="row">
       
       <div class="col s6">
-        <p>Nell'ultimo mese:&nbsp;</p>
+        <p>Mese:&nbsp;</p>
       </div>
       <div class="col s6">
-        <span>{{lastMonthTotalSchifezze}} €</span>
-      </div>
-
-      <div class="col s6">
-        <p>Soldi persi:&nbsp;</p>
-      </div>
-      <div class="col s6">
-        <span>{{totalSchifezze}} €</span>
+        <span>{{lastMonthTotalSchifezze|number_format(2, '.', '')}} €</span>
       </div>
 
       <div class="col s6">
-        <p>Soldi spesi:&nbsp;</p>
+        <p>Persi:&nbsp;</p>
       </div>
       <div class="col s6">
-        <span>{{totalPrize}} €</span>
+        <span>{{totalSchifezze|number_format(2, '.', '')}} €</span>
+      </div>
+
+      <div class="col s6">
+        <p>Spesi:&nbsp;</p>
+      </div>
+      <div class="col s6">
+        <span>{{totalPrize|number_format(2, '.', '')}} €</span>
+      </div>
+
+      <div class="col s6">
+        <p>Rimanenti:&nbsp;</p>
+      </div>
+      <div class="col s6">
+        <span>{{(totalSchifezze - totalPrize)|number_format(2, '.', '')}} €</span>
       </div>
 
       <div class="col s12">
