@@ -1,19 +1,21 @@
-var telegramBot = require('telegram-bot-api');
+var TelegramBot = require('node-telegram-bot-api');
 var schifezzaService = require('../schifezzaService.js');
+
+var BOT_TOKEN = '238845456:AAGmOyFHlzmm7NVRBf36CF06VhBAEBlg7QM';
 
 function InlineQueryParser(message){
   var CONFIRMATION_TOKEN = 'ciccione confirmed';
   var PRIZE_TOKEN = 'premio';
-  
+
   var schifezzaRegex = new RegExp('^(\\d+(?:[.,]\\d)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
   var prizeRegex = new RegExp('^premio\\s(\\d+(?:[.,]\\d)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
-  
+
   var query = message.query;
-  
+
   var ciccioneConfirmed = function(){
     return query.toLowerCase().endsWith(CONFIRMATION_TOKEN);
   };
-  
+
   var getCommandParams = function (matches) {
     if (matches && matches.length >= 3){
       return {
@@ -23,20 +25,20 @@ function InlineQueryParser(message){
     }
     return null;
   }
-  
+
   var getCommand = function(query) {
     var params = null;
     var matches = schifezzaRegex.exec(query);
-    
+
     //BOH from now on
     if (!matches) matches = prizeRegex.exec(query);
-    
+
     params = getCommandParams(matches);
     if (!params) return null;
-    
+
     if(query.startsWith(PRIZE_TOKEN)) params.type = 'prize';
     else params.type = 'schifezza';
-    
+
     return params;
   };
 
@@ -52,16 +54,11 @@ function InlineQueryParser(message){
   };
 };
 
-var bot = new telegramBot({
-  token: '238845456:AAGmOyFHlzmm7NVRBf36CF06VhBAEBlg7QM',
-  updates: {
-    enabled: true
-  },
-});
+var bot = new TelegramBot(BOT_TOKEN, {polling: true});
 
-bot.getMe().then(function(data){});
+bot.getMe().then(function(data){console.log(data)});
 
-bot.on('inline.query', function(message){
+bot.on('inline_query', function(message){
   var parser = InlineQueryParser(message);
 
   var query = message.query;
@@ -92,17 +89,15 @@ bot.on('inline.query', function(message){
     }
   }
 
-  bot.answerInlineQuery({
-    inline_query_id: message.id,
-    results: [{
+  bot.answerInlineQuery(message.id,
+    [{
       type: 'photo',
       id: 'silviapizza',
       photo_url: 'http://i.imgur.com/qacF7mV.jpg',
       thumb_url: 'http://i.imgur.com/qacF7mVt.jpg',
       input_message_content: {message_text: "Sono cicciona!"},
       cache_time: 1
-    }]
-  }).then(function(data){
+  }]).then(function(data){
   }).catch(function(err){
     console.log(err);
   });
