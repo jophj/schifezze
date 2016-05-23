@@ -24,6 +24,12 @@ var SchifezzaService = function(){
       if(callback) callback(result);
     });
   };
+  
+  var getLastMessage = function(callback){
+    SchifezzaMessage.find({}).sort({date: -1}).limit(1).exec(function(err, result){
+      if(callback) callback(result[0] || null);
+    });
+  }
 
   var getRecap = function (username, callback) {
     var toReturn = {
@@ -87,7 +93,8 @@ var SchifezzaService = function(){
     addPrize: addPrize,
     addSchifezza: addSchifezza,
     getRecap: getRecap,
-    getSchifezzeMessages: getSchifezzeMessages
+    getSchifezzeMessages: getSchifezzeMessages,
+    getLastMessage: getLastMessage
   };
 };
 

@@ -53,14 +53,17 @@ bot.on('inline_query', function(message){
 function answerInlineQuery(messageId){
   schifezzaService.getRecap('JoPhj', function(jopRecap){
     schifezzaService.getRecap('naashira', function (silviaRecap) {
-      bot.answerInlineQuery(messageId,
-        [
-          generateRecapInlineAnswer('Jop', jopRecap, silviaRecap),
-          generateRecapInlineAnswer('Silvia', silviaRecap, jopRecap)
-        ]).then(function(data){
-      }).catch(function(err){
-        console.log(err);
-      });
+      schifezzaService.getLastMessage(function (lastMessage) {
+        bot.answerInlineQuery(messageId,
+          [
+            generateRecapResult('Jop', jopRecap, silviaRecap),
+            generateRecapResult('Silvia', silviaRecap, jopRecap),
+            generateLastSchifezzaResult(lastMessage)
+          ]).then(function(data){
+        }).catch(function(err){
+          console.log(err);
+        });  
+      })
     });
   });
 }
@@ -70,7 +73,26 @@ function addMessageCallback(messageId, username, command){
   answerInlineQuery(messageId);  
 }
 
-function generateRecapInlineAnswer(username, recapData, recapData2){
+function generateLastSchifezzaResult(lastMessage) {
+  var usernameMap = {
+    'JoPhj': 'Jop',
+    'naashira': 'Silvia',
+  };
+  
+  return {
+    type: 'article',
+    id: Math.random().toString(),
+    title: 'Ultimo evento',
+    description: usernameMap[lastMessage.username] + ' - ' +
+      lastMessage.description + ' - ' + lastMessage.value + ' €',
+    input_message_content: {message_text: usernameMap[lastMessage.username] + ' - ' +
+      lastMessage.description + ' - ' + lastMessage.value + ' €',}
+    ,
+    cache_time: 1
+  }
+}
+
+function generateRecapResult(username, recapData, recapData2){
   var otherUsername = {
     'Jop': 'Silvia',
     'Silvia': 'Jop'
