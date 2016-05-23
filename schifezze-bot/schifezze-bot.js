@@ -10,7 +10,7 @@ function InlineQueryParser(message){
   var schifezzaRegex = new RegExp('^(\\d+(?:[.,]\\d)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
   var prizeRegex = new RegExp('^premio\\s(\\d+(?:[.,]\\d)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
 
-  var query = message.query;
+  var query = message.query || '';
 
   var ciccioneConfirmed = function(){
     return query.toLowerCase().endsWith(CONFIRMATION_TOKEN);

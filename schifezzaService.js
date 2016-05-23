@@ -1,7 +1,7 @@
 var SchifezzaMessage = require('./schifezzaMessage.js');
 
 var SchifezzaService = function(){
-  
+
   var userNameMap = {
     'JoPhj': 'Jop',
     'naashira': 'Silvia'
@@ -12,19 +12,19 @@ var SchifezzaService = function(){
     var schifezzaMessage = new SchifezzaMessage(schifezza);
     schifezzaMessage.save(callback);
   };
-  
+
   var addPrize = function(prize, callback){
     prize.type = 'prize';
     var schifezzaMessage = new SchifezzaMessage(prize);
     schifezzaMessage.save(callback);
   };
-  
+
   var getSchifezzeMessages = function(username, callback){
     SchifezzaMessage.find({username: username}).sort({date: -1}).exec(function(err, result){
       if(callback) callback(result);
     });
   };
-  
+
   var getRecap = function (username, callback) {
     var toReturn = {
       username: userNameMap[username] || 'Unknown user',
@@ -32,16 +32,16 @@ var SchifezzaService = function(){
       lastMonthTotalSchifezze: 0,
       totalPrize: 0,
     };
-    
+
     var lastMonthCallback = function(err, lastMonthTotal){
       if (!lastMonthTotal) callback(null);
       toReturn.lastMonthTotalSchifezze = !!lastMonthTotal[0] ? lastMonthTotal[0].total : 0;
       if (callback) callback(toReturn);
     };
-    
+
     var totalsCallback = function(err, totals){
       if (!totals) callback(null);
-      
+
       totals.find = function(f){
         for(var i = 0; i < this.length; i++){
           if (f(this[i])) return this[i];
@@ -49,10 +49,10 @@ var SchifezzaService = function(){
         return null;
       };
       var totalSchifezze = totals.find(function(x){return x._id.type === 'schifezza'});
-      var totalPrize = totals.find(function(x){return x._id.type === 'schifezza'});
+      var totalPrize = totals.find(function(x){return x._id.type === 'prize'});
       toReturn.totalSchifezze = !!totalSchifezze ? totalSchifezze.total : 0;
       toReturn.totalPrize = !!totalPrize ? totalPrize.total : 0;
-      
+
       SchifezzaMessage.aggregate([
         {
           $match: {
@@ -71,7 +71,7 @@ var SchifezzaService = function(){
         }
       ], lastMonthCallback);
     };
-    
+
     SchifezzaMessage.aggregate([
       { $match: {username: username} },
       {
