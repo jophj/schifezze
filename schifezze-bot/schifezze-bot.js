@@ -116,6 +116,6 @@ function generateRecapResult(username, recapData, recapData2){
 function getRecapString(recapData){
   if (!recapData) return "Invalid data";
   return "Rimanenti: "+ (recapData.totalSchifezze||0 - recapData.totalPrize||0) +
-    "; Mese: " + recapData.lastMonthTotalSchifezze||0 +
-    "; Totale: " + recapData.totalSchifezze||0;
+    " €; Mese: " + (recapData.lastMonthTotalSchifezze||0) +
+    " €; Totale: " + (recapData.totalSchifezze||0) + ' €';
 }
