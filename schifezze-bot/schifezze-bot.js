@@ -93,9 +93,15 @@ function generateLastSchifezzaResult(lastMessage) {
 }
 
 function generateRecapResult(username, recapData, recapData2){
-  var otherUsername = {
-    'Jop': 'Silvia',
-    'Silvia': 'Jop'
+  var userData = {
+    'Jop': {
+      otherUsername: 'Silvia',
+      thumbUrl: 'http://i.imgur.com/h3Y6fKat.jpg'
+    },
+    'Silvia': {
+      otherUsername: 'Jop',
+      thumbUrl: 'http://i.imgur.com/SUhW378t.jpg'
+    }
   };
   
   return {
@@ -103,10 +109,11 @@ function generateRecapResult(username, recapData, recapData2){
       id: Math.random().toString(),
       title: username,
       description: getRecapString(recapData),
+      thumb_url: userData[username].thumbUrl,
       input_message_content: {
         message_text:
           username + ' - ' + getRecapString(recapData) + '\n' +
-          otherUsername[username] + ' - ' + getRecapString(recapData2)
+          userData[username].otherUsername + ' - ' + getRecapString(recapData2)
       },
       cache_time: 1
   }
