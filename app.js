@@ -5,7 +5,7 @@ var Twig = require("twig"),
     schifezzaService = require('./schifezzaService.js'),
     app = express();
 
-mongoose.connect('mongodb://mediacenter/schifezze');
+mongoose.connect('mongodb://localhost/schifezze');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
