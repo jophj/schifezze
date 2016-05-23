@@ -5,7 +5,7 @@ var Twig = require("twig"),
     schifezzaService = require('./schifezzaService.js'),
     app = express();
 
-mongoose.connect('mongodb://localhost/schifezze');
+mongoose.connect('mongodb://mediacenter/schifezze');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -42,7 +42,7 @@ function initExpressApp(){
   
   var jopMessagesCallback = function(list, callback){
     renderData.schifezzeList.jop = list;
-    schifezzaService.getSchifezzeMessages('Silvia', function(list){
+    schifezzaService.getSchifezzeMessages('naashira', function(list){
       silviaMessagesCallback(list, callback);
     });
   };
