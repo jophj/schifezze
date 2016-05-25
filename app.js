@@ -19,7 +19,8 @@ function initExpressApp(){
   app.set("twig options", {
     strict_variables: false
   });
-
+  
+  app.use('/highcharts', express.static(__dirname + '/node_modules/highcharts'));
   app.use('/materialize-css', express.static(__dirname + '/node_modules/materialize-css/dist'));
   app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist'));
   app.use('/font-awesome', express.static(__dirname + '/node_modules/font-awesome'));
