@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "express": "^4.13.4",
-    "font-awesome": "^4.6.1",
     "highcharts": "^4.2.5",
     "jquery": "^2.2.4",
     "materialize-css": "^0.97.6",

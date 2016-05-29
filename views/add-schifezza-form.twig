@@ -1,0 +1,28 @@
+<div class="row" id="add-shifezza-form-{{username}}">
+  <form id="form-{{username}}" class="col s12">
+    <div class="row">
+
+      <div class="input-field col s3">
+        <i class="material-icons prefix">attach_money</i>
+        <input id="value-{{username}}" type="text">
+        <label for="value-{{username}}" data-error="Invalido"> Valore </label>
+      </div>
+
+      <div class="input-field col s9">
+        <i class="material-icons prefix">insert_comment</i>
+        <input id="comment-{{username}}" type="text"></textarea>
+        <label for="comment-{{username}}" data-error="Inserisci un commento"> Commento </label>
+      </div>
+      <div class="input-field col s12">
+        <a id="submit-button-{{username}}" class="btn waves-effect waves-light" style="display:block;text-align:center;">Aggiungi</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript" src="scripts/add-schifezza-form-controller.js"></script>
+<script type="text/javascript">
+ (function(){
+  new AddSchifezzaFormController('{{username}}');
+ })();
+</script>

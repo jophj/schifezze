@@ -2,8 +2,8 @@ function InlineQueryParser(message){
   var CONFIRMATION_TOKEN = 'ciccione confirmed';
   var PRIZE_TOKEN = 'premio';
 
-  var schifezzaRegex = new RegExp('^(\\d+(?:[.,]\\d)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
-  var prizeRegex = new RegExp('^premio\\s(\\d+(?:[.,]\\d)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
+  var schifezzaRegex = new RegExp('^(\\d+(?:[.,]\\d+)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
+  var prizeRegex = new RegExp('^premio\\s(\\d+(?:[.,]\\d+)?)\\s*€?\\s(.+)\\s+('+CONFIRMATION_TOKEN+')$', 'i');
 
   var query = message.query || '';
 

@@ -9,6 +9,7 @@ var SchifezzaService = function(){
 
   var addSchifezza = function(schifezza, callback){
     schifezza.type = 'schifezza';
+    schifezza.date = new Date();
     var schifezzaMessage = new SchifezzaMessage(schifezza);
     schifezzaMessage.save(callback);
   };
