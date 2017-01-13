@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "pm2 stop schifezze ; pm2 start app.js --name 'schifezze' --interpreter=~/.nvm/versions/node/v4.4.4/bin/node",
+    "start": "pm2 stop schifezze ; pm2 start app.js --name 'schifezze'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

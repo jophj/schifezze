@@ -6,13 +6,13 @@ var Twig = require("twig"),
     schifezzaService = require('./schifezzaService.js'),
     app = express();
 
-mongoose.connect('mongodb://mediacenter/schifezze');
+mongoose.connect('mongodb://mongouser:MongoUser!@mediacenter/schifezze');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   var app = initExpressApp();
-  app.listen(8931);
+  app.listen(8031);
 });
 
  
