@@ -1,5 +1,6 @@
 const BotModule = require('../bot-module');
-const schifezzaService = require('../schifezzaService.js');
+const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
+const queryParser = new SchifezzaInlineQueryParser();
 
 class SchifezzaBotModule extends BotModule {
 
@@ -7,6 +8,10 @@ class SchifezzaBotModule extends BotModule {
     this.bot.on('inline_query', (ctx) => {
       const inlineQuery = ctx.update.inline_query;
       const query = inlineQuery.query || '';
+      const command = queryParser.parse(query);
+      if (command) {
+        
+      }
     });
   }
 }
