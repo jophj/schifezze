@@ -1,5 +1,6 @@
 const BotModule = require('../bot-module');
 const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
+const Event = require('../models/event');
 const queryParser = new SchifezzaInlineQueryParser();
 
 const descriptionTypeStrategy = {
@@ -71,7 +72,16 @@ class SchifezzaBotModule extends BotModule {
     });
 
     this.bot.on('chosen_inline_result', (ctx) => {
-      console.log(ctx);
+      const user = ctx.update.chosen_inline_result.from.first_name;
+      const command = queryParser.parse(ctx.update.chosen_inline_result.query);
+      const event = new Event({
+        user,
+        type: command.name,
+        description: command.description,
+        date: new Date(),
+        value: command.money
+      });
+      event.save((err) => console.log(err));
     });
   }
 }
