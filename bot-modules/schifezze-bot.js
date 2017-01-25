@@ -2,6 +2,21 @@ const BotModule = require('../bot-module');
 const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
 const queryParser = new SchifezzaInlineQueryParser();
 
+function getHelpResults() {
+  const results = [
+    {
+      id: `help_message_001`,
+      title: 'Inserire i dati nel formato seguente',
+      description: '(schifezza|premio|meme) 1 € descrizione dell\'evento',
+      type: 'article',
+      input_message_content: {
+        message_text: 'Ho gnammato una schifezza!',
+      }
+    }
+  ];
+  return results;
+}
+
 class SchifezzaBotModule extends BotModule {
 
   initModule() {
@@ -13,7 +28,7 @@ class SchifezzaBotModule extends BotModule {
         const results = [
           {
             id: `${Math.random() * 2048}`,
-            title: 'Result title ' + Math.random() * 2048,
+            title: 'Inserireasd ',
             type: 'article',
             input_message_content: {
               message_text: `stocazzo`,
@@ -22,6 +37,10 @@ class SchifezzaBotModule extends BotModule {
           }
         ]
 
+        return ctx.answerInlineQuery(results);
+      }
+      else {
+        const results = getHelpResults();
         return ctx.answerInlineQuery(results);
       }
     });
