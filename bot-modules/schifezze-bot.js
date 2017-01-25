@@ -3,22 +3,22 @@ const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-pars
 const queryParser = new SchifezzaInlineQueryParser();
 
 function getHelpResults() {
-  const results = [
-    {
-      id: `help_message_001`,
-      title: 'Inserire i dati nel formato seguente',
-      description: '(schifezza|premio|meme) 1 € descrizione dell\'evento',
-      type: 'article',
-      input_message_content: {
-        message_text: 'Ho gnammato una schifezza!',
-      }
+  const helpResult = {
+    id: `help_message_001`,
+    title: 'Inserire i dati nel formato seguente',
+    description: '(schifezza|premio|meme) 1 € descrizione dell\'evento',
+    type: 'article',
+    input_message_content: {
+      message_text: 'Ho gnammato una schifezza!',
     }
-  ];
+  }
+  const results = [helpResult];
+
+  // TODO aggiungere i risultati di riepilogo
   return results;
 }
 
 class SchifezzaBotModule extends BotModule {
-
   initModule() {
     this.bot.on('inline_query', (ctx) => {
       const inlineQuery = ctx.update.inline_query;
@@ -36,7 +36,6 @@ class SchifezzaBotModule extends BotModule {
             }
           }
         ]
-
         return ctx.answerInlineQuery(results);
       }
       else {
