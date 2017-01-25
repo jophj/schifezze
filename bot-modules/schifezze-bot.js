@@ -34,6 +34,10 @@ function getConfirmationResultDescription(command) {
   return description;
 }
 
+function getConfirmationResultText(command) {
+  return `${getConfirmationResultDescription(command)}\r\n"${command.description}"`;
+}
+
 function getConfirmationResult(command) {
   const confirmationResult = {
     id: `${Math.random() * 65536}`,
@@ -41,7 +45,7 @@ function getConfirmationResult(command) {
     description: 'Seleziona questo risultato per confermare l\'azione.',
     type: 'article',
     input_message_content: {
-      message_text: 'Ho gnammato una schifezza!',
+      message_text: getConfirmationResultText(command),
     }
   }
   return confirmationResult;
