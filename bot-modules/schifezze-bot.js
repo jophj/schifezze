@@ -2,9 +2,21 @@ const BotModule = require('../bot-module');
 const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
 const queryParser = new SchifezzaInlineQueryParser();
 
-function getHelpResults() {
+const descriptionTypeStrategy = {
+  'meme': 'Giorno meme.',
+  'schifezza': 'Mangiate schifezze.',
+  'premio': 'Riscattato un premio.'
+}
+
+const descriptionValueStrategy = {
+  'meme': 'di riscatto rimosso/i.',
+  'schifezza': 'di riscatto aggiunti.',
+  'premio': 'riscattati.'
+}
+
+function getHelpResult() {
   const helpResult = {
-    id: `help_message_001`,
+    id: 'help_message_001',
     title: 'Inserire i dati nel formato seguente',
     description: '(schifezza|premio|meme) 1 € descrizione dell\'evento',
     type: 'article',
@@ -12,10 +24,27 @@ function getHelpResults() {
       message_text: 'Ho gnammato una schifezza!',
     }
   }
-  const results = [helpResult];
+  return helpResult;
+}
 
-  // TODO aggiungere i risultati di riepilogo
-  return results;
+function getConfirmationResultDescription(command) {
+  let description = `${descriptionTypeStrategy[command.name]} `;
+  description += `${command.money} € `;
+  description += `${descriptionValueStrategy[command.name]}`;
+  return description;
+}
+
+function getConfirmationResult(command) {
+  const confirmationResult = {
+    id: `${Math.random() * 65536}`,
+    title: getConfirmationResultDescription(command),
+    description: 'Seleziona questo risultato per confermare l\'azione.',
+    type: 'article',
+    input_message_content: {
+      message_text: 'Ho gnammato una schifezza!',
+    }
+  }
+  return confirmationResult;
 }
 
 class SchifezzaBotModule extends BotModule {
@@ -24,24 +53,17 @@ class SchifezzaBotModule extends BotModule {
       const inlineQuery = ctx.update.inline_query;
       const query = inlineQuery.query || '';
       const command = queryParser.parse(query);
+      const results = [];
       if (command) {
-        const results = [
-          {
-            id: `${Math.random() * 2048}`,
-            title: 'Inserireasd ',
-            type: 'article',
-            input_message_content: {
-              message_text: `stocazzo`,
-              parse_mode: 'Markdown'
-            }
-          }
-        ]
-        return ctx.answerInlineQuery(results);
+        results.push(getConfirmationResult(command));
       }
       else {
-        const results = getHelpResults();
-        return ctx.answerInlineQuery(results);
+        results.push(getHelpResult());
       }
+
+      // TODO aggiungere risultati di riepilogo
+      // TODO aggiungere ultimo evento
+      return ctx.answerInlineQuery(results);
     });
 
     this.bot.on('chosen_inline_result', (ctx) => {
