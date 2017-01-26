@@ -1,7 +1,7 @@
 const BotModule = require('../bot-module');
 const Event = require('../models/event');
 const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
-const { getHelpResult, getConfirmationResult } = require('../utils/result-generator');
+const { getHelpResult, getConfirmationResult, getRecapResults } = require('../utils/result-generator');
 const queryParser = new SchifezzaInlineQueryParser();
 
 class SchifezzaBotModule extends BotModule {

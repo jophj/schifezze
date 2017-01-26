@@ -1,3 +1,6 @@
+const Promise = require("bluebird");
+const { getUsersWithEvents } = require('../repositories/user');
+
 const descriptionTypeStrategy = {
   'meme': 'Giorno meme.',
   'schifezza': 'Mangiate schifezze.',
@@ -47,7 +50,26 @@ function getConfirmationResult(command) {
   return confirmationResult;
 }
 
+function getRecapResults() {
+  // per ogni utente
+  // prendi tutti gli eventi
+  // somma i valori e sottrai riscatti e meme
+  // prendi gli eventi dell'ultimo mese
+  // somma i valori e sottra riscatti e meme dell'ultimo mese
+
+  const promise = new Promise((resolve) => {
+    getUsersWithEvents().then((result) => resolve(result));
+  });
+
+  return promise;
+}
+
+getRecapResults().then((result) => {
+  
+});
+
 module.exports = {
   getHelpResult,
   getConfirmationResult,
+  getRecapResults
 }
