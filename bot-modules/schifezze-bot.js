@@ -18,9 +18,12 @@ class SchifezzaBotModule extends BotModule {
         results.push(getHelpResult());
       }
 
-      // TODO aggiungere risultati di riepilogo
+      getRecapResults().then((recapResults) => {
+        results.push(...recapResults);
+        ctx.answerInlineQuery(results);
+      });
+
       // TODO aggiungere ultimo evento
-      return ctx.answerInlineQuery(results);
     });
 
     this.bot.on('chosen_inline_result', (ctx) => {
