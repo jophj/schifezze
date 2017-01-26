@@ -1,56 +1,8 @@
 const BotModule = require('../bot-module');
-const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
 const Event = require('../models/event');
+const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
+const { getHelpResult, getConfirmationResult } = require('../utils/result-generator');
 const queryParser = new SchifezzaInlineQueryParser();
-
-const descriptionTypeStrategy = {
-  'meme': 'Giorno meme.',
-  'schifezza': 'Mangiate schifezze.',
-  'premio': 'Riscattato un premio.'
-}
-
-const descriptionValueStrategy = {
-  'meme': 'di riscatto rimosso/i.',
-  'schifezza': 'di riscatto aggiunti.',
-  'premio': 'riscattati.'
-}
-
-function getHelpResult() {
-  const helpResult = {
-    id: 'help_message_001',
-    title: 'Inserire i dati nel formato seguente',
-    description: '(schifezza|premio|meme) 1 € descrizione dell\'evento',
-    type: 'article',
-    input_message_content: {
-      message_text: 'Ho gnammato una schifezza!',
-    }
-  }
-  return helpResult;
-}
-
-function getConfirmationResultDescription(command) {
-  let description = `${descriptionTypeStrategy[command.name]} `;
-  description += `${command.money} € `;
-  description += `${descriptionValueStrategy[command.name]}`;
-  return description;
-}
-
-function getConfirmationResultText(command) {
-  return `${getConfirmationResultDescription(command)}\r\n"${command.description}"`;
-}
-
-function getConfirmationResult(command) {
-  const confirmationResult = {
-    id: `${Math.random() * 65536}`,
-    title: getConfirmationResultDescription(command),
-    description: 'Seleziona questo risultato per confermare l\'azione.',
-    type: 'article',
-    input_message_content: {
-      message_text: getConfirmationResultText(command),
-    }
-  }
-  return confirmationResult;
-}
 
 class SchifezzaBotModule extends BotModule {
   initModule() {
@@ -72,7 +24,7 @@ class SchifezzaBotModule extends BotModule {
     });
 
     this.bot.on('chosen_inline_result', (ctx) => {
-      const user = ctx.update.chosen_inline_result.from.first_name;
+      const user = ctx.update.chosen_inline_result.from.username;
       const command = queryParser.parse(ctx.update.chosen_inline_result.query);
       const event = new Event({
         user,
@@ -81,7 +33,9 @@ class SchifezzaBotModule extends BotModule {
         date: new Date(),
         value: command.money
       });
-      event.save((err) => console.log(err));
+      event.save((err) => {
+        if (err) console.log(err)
+      });
     });
   }
 }
