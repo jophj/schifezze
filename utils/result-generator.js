@@ -18,11 +18,13 @@ function summarizeEvents(result) {
   const recaps = result.map((r) => {
     const summary = r.events.reduce((sum, e) => {
       let toAddTotal = 0;
+      let toAddRemaining = 0;
       let toAddTotalPrize = 0;
       let toAddTotalMeme = 0;
 
       switch (e.type) {
         case 'schifezza':
+          toAddRemaining += e.value;
           toAddTotal += e.value;
           break;
         case 'premio':
@@ -32,17 +34,19 @@ function summarizeEvents(result) {
           toAddTotalMeme += e.value;
       }
 
-      sum.total += toAddTotal - toAddTotalMeme - toAddTotalPrize;
+      sum.total += toAddTotal;
+      sum.remaining += toAddRemaining - toAddTotalMeme - toAddTotalPrize;
       sum.totalPrize += toAddTotalPrize;
       sum.totalMeme += toAddTotalMeme;
 
       return sum;
 
-    }, { total: 0, totalPrize: 0, totalMeme: 0 });
+    }, { remaining: 0, total:0 ,totalPrize: 0, totalMeme: 0 });
 
     return {
       user: r._id.user,
       total: summary.total,
+      remaining: summary.remaining,
       totalPrize: summary.totalPrize,
       totalMeme: summary.totalMeme,
     }
@@ -95,15 +99,15 @@ function getRecapResults() {
         return {
           id: `${Math.random() * 65536}`,
           title: `Recap ${s.user}`,
-          description: `Totale: ${s.total} €; Premi riscattati: ${s.totalPrize} €; Giorni meme: ${s.totalMeme} €`,
+          description: `Rimanenti: ${s.remaining} €; Premi riscattati: ${s.totalPrize} €; Giorni meme: ${s.totalMeme} €; Totale: ${s.total} €`,
           type: 'article',
           input_message_content: {
-            message_text: `Recap ${s.user}\r\nTotale: ${s.total} €; Premi riscattati: ${s.totalPrize} €; Giorni meme: ${s.totalMeme} €`,
+            message_text: `Recap ${s.user}\r\nTotale: ${s.remaining} €; Premi riscattati: ${s.totalPrize} €; Giorni meme: ${s.totalMeme} €; Totale: ${s.total} €`,
           }
         }
       });
       resolve(recapResult);
-    });
+    }).catch((err) => console.log(err));
   });
 
   return promise;
@@ -131,7 +135,7 @@ function getLastEventResult() {
           }
       }
       resolve(lasteventResult);
-    });
+    }).catch((err) => console.log(err));
   });
 
   return promise;

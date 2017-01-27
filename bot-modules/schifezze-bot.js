@@ -29,7 +29,7 @@ class SchifezzaBotModule extends BotModule {
           results.push(lastEventResult);
         }
         ctx.answerInlineQuery(results);
-      });
+      }).catch((err) => console.log(err));
     });
 
     this.bot.on('chosen_inline_result', (ctx) => {
