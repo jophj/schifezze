@@ -14,7 +14,9 @@ db.on('error', console.error.bind(console, 'Database connection error:'));
 
 const botModuleManager = new BotModuleManager(config.token);
 
-config.botModules.forEach(function(botModulePath) {
-  const botModule = require(botModulePath);
-  botModuleManager.registerBotModule(botModule);
-});
+if (config.botModules.length) {
+  config.botModules.forEach(function (botModulePath) {
+    const botModule = require(botModulePath);
+    botModuleManager.registerBotModule(botModule);
+  });
+}
