@@ -25,7 +25,9 @@ class SchifezzaBotModule extends BotModule {
 
       Promise.all([getRecapResults(), getLastEventResult()]).then(([recapResults, lastEventResult]) => {
         results.push(...recapResults);
-        results.push(lastEventResult);
+        if (lastEventResult) {
+          results.push(lastEventResult);
+        }
         ctx.answerInlineQuery(results);
       });
     });
