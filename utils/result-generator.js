@@ -1,4 +1,5 @@
 const Promise = require("bluebird");
+const Event = require('../models/event');
 const { getUsersWithEvents } = require('../repositories/user');
 
 const descriptionTypeStrategy = {
@@ -87,15 +88,11 @@ function getConfirmationResult(command) {
 }
 
 function getRecapResults() {
-  // somma i valori e sottrai riscatti e meme
-  // prendi gli eventi dell'ultimo mese
-  // somma i valori e sottra riscatti e meme dell'ultimo mese
-
   const promise = new Promise((resolve) => {
     getUsersWithEvents().then((results) => {
       const recaps = summarizeEvents(results);
       const recapResult = recaps.map((s) => {
-         return {
+        return {
           id: `${Date.now()}`,
           title: `Recap ${s.user}`,
           description: `Totale: ${s.total} €; Premi riscattati: ${s.totalPrize} €; Giorni meme: ${s.totalMeme} €`,
@@ -112,8 +109,32 @@ function getRecapResults() {
   return promise;
 }
 
+function getLastEventResult() {
+  const promise = new Promise((resolve) => {
+    Event.findOne().sort({ date: -1 }).limit(1).exec().then((result) => {
+      result.money = result.value;
+      result.name = result.type;
+      const resultDescription = getConfirmationResultDescription(result);
+      const formattedDate = `${result.date.getDate()}/${result.date.getMonth() + 1}/${result.date.getYear()}`;
+      const lasteventResult = {
+        id: `${Date.now()}`,
+        title: `Ultimo evento: ${resultDescription}`,
+        description: `${result.user} il ${formattedDate}`,
+        type: 'article',
+          input_message_content: {
+            message_text: `Ultimo evento: ${resultDescription}\r\n${result.user} il ${formattedDate}`,
+          }
+      }
+      resolve(lasteventResult);
+    });
+  });
+
+  return promise;
+}
+
 module.exports = {
   getHelpResult,
   getConfirmationResult,
-  getRecapResults
+  getRecapResults,
+  getLastEventResult
 }

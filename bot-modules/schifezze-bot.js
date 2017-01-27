@@ -1,7 +1,12 @@
+const Promise = require('bluebird');
 const BotModule = require('../bot-module');
 const Event = require('../models/event');
 const SchifezzaInlineQueryParser = require('../utils/schifezze-inline-query-parser');
-const { getHelpResult, getConfirmationResult, getRecapResults } = require('../utils/result-generator');
+const {
+  getHelpResult,
+  getConfirmationResult,
+  getRecapResults,
+  getLastEventResult } = require('../utils/result-generator');
 const queryParser = new SchifezzaInlineQueryParser();
 
 class SchifezzaBotModule extends BotModule {
@@ -18,17 +23,17 @@ class SchifezzaBotModule extends BotModule {
         results.push(getHelpResult());
       }
 
-      getRecapResults().then((recapResults) => {
+      Promise.all([getRecapResults(), getLastEventResult()]).then(([recapResults, lastEventResult]) => {
         results.push(...recapResults);
+        results.push(lastEventResult);
         ctx.answerInlineQuery(results);
       });
-
-      // TODO aggiungere ultimo evento
     });
 
     this.bot.on('chosen_inline_result', (ctx) => {
       const user = ctx.update.chosen_inline_result.from.username;
       const command = queryParser.parse(ctx.update.chosen_inline_result.query);
+      if (!command) return;
       const event = new Event({
         user,
         type: command.name,
